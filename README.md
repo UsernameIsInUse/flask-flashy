@@ -4,7 +4,7 @@ Custom flash system allowing custom keyword arguments for Flask.
 
 ## How it works
 
-Flask's default `flash()` method simply takes two strings and passes them into the session (the message and category, eg `flash('Username Is In Use', 'warning')`), which is then obtained and cleared by `get_flashed_messages()` in jinja.
+Flask's default `flash()` function simply takes two strings and passes them into the session (the message and category, eg `flash('Username Is In Use', 'warning')`), which is then obtained and cleared by `get_flashed_messages()` in jinja.
 
 flask-flashy has a class-based flashing system, allowing you to pass in as many keyword arguments as you'd like, while still keeping the default message and category to align with flask and allow for minimal edits to convert (eg `flash('Username Is In Use. Login Instead?', 'warning', url=url_for('login'), timestamp=datetime.now() )`).
 
@@ -16,26 +16,40 @@ Install via pip:
 pip install flask-flashy
 ```
 
-After installing, wrap your Flask app with a `Flashy(app)`, or call `Flashy.init_app(app)`
+After installing, wrap your Flask app with flashy...
 
 ```python
 from flask import Flask
-from flask_flashy import Flashy
+from flask_flashy import Flashy, flash
 
 app = Flask(__name__)
 flashy = Flashy(app)
+
+@app.route("/")
+def index():
+  flash('Hello flashy!')
+  return render_template('index.html')
 ```
 
-or to initialize later or use with blueprints:
+...or initialize later for use with blueprints and app factories.
 
 ```python
 from flask import Flask
-from flask_flashy import Flashy
+from flask_flashy import Flashy, flash
+
+flashy = Flashy()
 
 app = Flask(__name__)
-flashy = Flashy()
+
 flashy.init_app(app)
+
+@app.route("/")
+def index():
+  flash('Hello flashy!')
+  return render_template('index.html')
 ```
+
+> **_NOTE:_**  Flashy must be initialized in order to create the context processor which allows `get_flashy_messages()` to be used in jinja templates.
 
 ## Examples
 
@@ -44,7 +58,7 @@ After initializing the app, simply call for a flash in a route, passing in the m
 ```python
 @app.route('/')
 def index():
-  flashy.flash('Woah there partner!', 'danger', url='https://example.com/')
+  flash('Woah there partner!', 'danger', url='https://example.com/')
   return render_template('index.html')
 ```
 
@@ -66,7 +80,15 @@ Then get the flashes in the template using jinja:
 {% endwith %}
 ```
 
+> **_NOTE:_**  Yes, gone are the days of having to specify `with_categories=True`, it passes everything automatically.
+
 And style and use to your hearts content.
+
+Don't like flashy taking over the `flash()` function? Want to use both the flash and flashy systems in the same project (for whatever reason)? Simply import it with a custom name, such as...
+
+```python
+from flask-flashy import flash as flashyFlash
+```
 
 ## TODO
 
@@ -76,4 +98,5 @@ And style and use to your hearts content.
 
 ## Release History
 
+- 0.2.0 - Made `flash()` and `get_flashed_messages()` their own functions rather than methods within `Flashy`, and more verbose docstrings.
 - 0.1.0 - Initial release on pypi.
