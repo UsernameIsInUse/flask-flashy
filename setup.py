@@ -3,7 +3,7 @@ from pathlib import Path
 
 setup(
   name='flask-flashy',
-  version='0.2.0',
+  version='0.2.1',
   description="Custom flash system allowing custom keyword arguments for Flask.",
   url='https://github.com/UsernameIsInUse/flask-flashy',
   author='Alex Chichester',
