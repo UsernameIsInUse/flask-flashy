@@ -94,6 +94,7 @@ from flask-flashy import flash as flashyFlash
 
 ## Release History
 
+- 0.2.2 - Hotfix, `get_flashed_messages()` was clearing the list before returning them resulting in an error.
 - 0.2.1 - Fixed JSON serialization bug, now stores the flash directly as a dict, and converts into a FlashyMessage once retrieved.
 - 0.2.0 - Made `flash()` and `get_flashed_messages()` their own functions rather than methods within `Flashy`, and more verbose docstrings.
 - 0.1.0 - Initial release on pypi.

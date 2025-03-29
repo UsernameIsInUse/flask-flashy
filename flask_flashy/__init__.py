@@ -35,7 +35,7 @@ def flash(message: str, category: str = "message", **kwargs) -> None:
         **kwargs: Optional additional attributes to be added to the message object, such as url, title, timestamp, etc.
     """
     flashes = session.get("_flashy", [])
-    flash = {message:message, category:category, **kwargs}
+    flash = {'message':message, 'category':category, **kwargs}
     flashes.append(flash)
     session["_flashy"] = flashes
 
@@ -49,5 +49,5 @@ def get_flashy_messages() -> list:
     flashes = session.get("_flashy", None)
     if flashes is None:
         return []
-    flashes = session.pop("_flashy")
+    session.pop("_flashy")
     return [FlashyMessage(**flash) for flash in flashes]
